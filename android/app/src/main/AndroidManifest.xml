@@ -1,8 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ai6bh.atclient_test">
+
    <application
         android:label="atclient_test"
         android:icon="@mipmap/ic_launcher">
+        <!-- Required to fetch data from the internet. -->
+       <uses-permission android:name="android.permission.INTERNET" />
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

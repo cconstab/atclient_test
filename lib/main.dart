@@ -8,6 +8,7 @@ import 'package:at_utils/at_logger.dart' show AtSignLogger;
 import 'package:path_provider/path_provider.dart'
     show getApplicationSupportDirectory;
 import 'package:at_app_flutter/at_app_flutter.dart' show AtEnv;
+import 'package:atclient_test/services/update_read.dart';
 
 Future<void> main() async {
   await AtEnv.load();
@@ -89,39 +90,45 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
+  String value = "";
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  Widget build(BuildContext context) {
+    /// Get the AtClientManager instance
+    var atClientManager = AtClientManager.getInstance();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dashboard'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Text('Counter ${_counter.toString()}',style: const TextStyle(fontSize: 30)),
 
-    @override
-    Widget build(BuildContext context) {
-      /// Get the AtClientManager instance
-      var atClientManager = AtClientManager.getInstance();
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Dashboard'),
+            Text('HTTP '+value,style: const TextStyle(fontSize: 30)),
+
+            /// Use the AtClientManager instance to get the current atsign
+            Text(
+                'Current @sign: ${atClientManager.atClient.getCurrentAtSign()}',
+                style: const TextStyle(fontSize: 30)),
+          
+          ],
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Text('Counter ${_counter.toString()}'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
 
-              /// Use the AtClientManager instance to get the current atsign
-              Text(
-                  'Current @sign: ${atClientManager.atClient.getCurrentAtSign()}'),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        ),
-      );
-    }
-
-   
+  void _incrementCounter() async {
+    _counter++;
+    updateCounter(_counter);
+    await Future.delayed(const Duration(seconds: 10));
+    var web = await getValue();
+    value = web.body;
+    setState(() {});
   }
 }
