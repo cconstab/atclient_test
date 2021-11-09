@@ -37,6 +37,9 @@ updateCounter(int counter) async {
   await atClient.put(key, counter.toString());
   atClientManager.syncService.sync();
 
+
+// Comment out this section and everything works fine
+// Section START
     key = AtKey()
     ..key = 'counter2'
     ..sharedBy = currentAtsign
@@ -47,6 +50,8 @@ updateCounter(int counter) async {
   //await atClient.delete(key);
   await atClient.put(key, counter.toString());
   atClientManager.syncService.sync();
+
+// Section END
 
 
 }
