@@ -1,5 +1,5 @@
+import 'package:atclient_test/models/httpresult.dart';
 import 'package:http/http.dart' as http;
-
 
 import 'package:at_commons/at_commons.dart';
 import 'package:at_client_mobile/at_client_mobile.dart';
@@ -19,8 +19,6 @@ updateCounter(int counter) async {
   var preference = await futurePreference;
   atClientManager.atClient.setPreferences(preference);
 
-
-
   // Save radio Frequency and Mode
   var metaData = Metadata()
     ..isPublic = true
@@ -37,17 +35,18 @@ updateCounter(int counter) async {
   print('Updating Counter to : ' + counter.toString());
   //await atClient.delete(key);
   await atClient.put(key, counter.toString());
-
+  atClientManager.syncService.sync();
 }
 
-Future<http.Response> getValue(){
-    String? currentAtsign;
+void getValue(HttpResult result) async {
+  String? currentAtsign;
   late AtClient atClient;
   late AtClientManager atClientManager;
 
   atClientManager = AtClientManager.getInstance();
   atClient = atClientManager.atClient;
   currentAtsign = atClient.getCurrentAtSign();
-return http.get(Uri.parse('https://wavi.ng/api?atp=counter.ai6bh$currentAtsign'));
+  var stuff = await http.get(Uri.parse('https://wavi.ng/api?atp=counter.ai6bh$currentAtsign'));
 
+  result.httpResponse = stuff.body;
 }
