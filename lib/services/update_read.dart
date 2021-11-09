@@ -36,6 +36,19 @@ updateCounter(int counter) async {
   //await atClient.delete(key);
   await atClient.put(key, counter.toString());
   atClientManager.syncService.sync();
+
+    key = AtKey()
+    ..key = 'counter2'
+    ..sharedBy = currentAtsign
+    ..sharedWith = null
+    ..metadata = metaData;
+
+      print('Updating Counter2 to : ' + counter.toString());
+  //await atClient.delete(key);
+  await atClient.put(key, counter.toString());
+  atClientManager.syncService.sync();
+
+
 }
 
 void getValue(HttpResult result) async {
