@@ -95,14 +95,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
   String value = "";
-  var lookup = HttpResult(httpResponse: 'nothing yet');
+  var lookup1 = HttpResult(httpResponse: 'nothing yet');
+  var lookup2 = HttpResult(httpResponse: 'nothing yet');
+  var lookup3 = HttpResult(httpResponse: 'nothing yet');
   var atClientManager = AtClientManager.getInstance();
 
   @override
   Widget build(BuildContext context) {
     return TimerBuilder.periodic(const Duration(milliseconds: 1000),
         builder: (context) {
-        getValue(lookup);
+        getValue(lookup1,1);
+        getValue(lookup2,2);
+        getValue(lookup3,3);
       /// Get the AtClientManager instance
       return Scaffold(
         appBar: AppBar(
@@ -119,8 +123,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('Counter ${_counter.toString()}',
                   style: const TextStyle(fontSize: 30)),
 
-              Text('HTTP ' + lookup.httpResponse, style: const TextStyle(fontSize: 30)),
-
+              Text('HTTP ' + lookup1.httpResponse, style: const TextStyle(fontSize: 20)),
+              Text('HTTP ' + lookup2.httpResponse, style: const TextStyle(fontSize: 20)),
+              Text('HTTP ' + lookup3.httpResponse, style: const TextStyle(fontSize: 20)),
               /// Use the AtClientManager instance to get the current atsign
               Text(
                   'Current @sign: ${atClientManager.atClient.getCurrentAtSign()}',

@@ -15,11 +15,10 @@ updateCounter(int counter) async {
   currentAtsign = atClient.getCurrentAtSign();
   var currentAtsignNoAt = currentAtsign!.replaceAll('@', '');
   Future<AtClientPreference> futurePreference = loadAtClientPreference();
-
+ String message = '<!DOCTYPE html> <html> <head> <meta http-equiv="refresh" content="5" /><style> h1 {text-align: center;} </style> </head><body> <h1>${currentAtsign.toUpperCase()} using RADIO listening on ${counter.toString().padRight(10)} USB </h1> </body> </html>';
   var preference = await futurePreference;
   atClientManager.atClient.setPreferences(preference);
 
-  // Save radio Frequency and Mode
   var metaData = Metadata()
     ..isPublic = true
     ..isEncrypted = false
@@ -27,15 +26,15 @@ updateCounter(int counter) async {
     ..ttl = 3600000;
 
   var key = AtKey()
-    ..key = 'counter'
+    ..key = 'counter1'
     ..sharedBy = currentAtsign
     ..sharedWith = null
     ..metadata = metaData;
 
-  print('Updating Counter to : ' + counter.toString());
+  print('Updating Counter1 to : ' + counter.toString());
   //await atClient.delete(key);
-  await atClient.put(key, counter.toString());
-  atClientManager.syncService.sync();
+  await atClient.put(key, message);
+  //atClientManager.syncService.sync();
 
 
 // Comment out this section and everything works fine
@@ -48,15 +47,27 @@ updateCounter(int counter) async {
 
       print('Updating Counter2 to : ' + counter.toString());
   //await atClient.delete(key);
-  await atClient.put(key, counter.toString());
-  atClientManager.syncService.sync();
+  await atClient.put(key, message);
+  //atClientManager.syncService.sync();
+
+
+      key = AtKey()
+    ..key = 'counter3'
+    ..sharedBy = currentAtsign
+    ..sharedWith = null
+    ..metadata = metaData;
+
+      print('Updating Counter3 to : ' + counter.toString());
+  //await atClient.delete(key);
+  await atClient.put(key, message);
+  //atClientManager.syncService.sync();
 
 // Section END
 
 
 }
 
-void getValue(HttpResult result) async {
+void getValue(HttpResult result,counter) async {
   String? currentAtsign;
   late AtClient atClient;
   late AtClientManager atClientManager;
@@ -64,7 +75,7 @@ void getValue(HttpResult result) async {
   atClientManager = AtClientManager.getInstance();
   atClient = atClientManager.atClient;
   currentAtsign = atClient.getCurrentAtSign();
-  var stuff = await http.get(Uri.parse('https://wavi.ng/api?atp=counter.ai6bh$currentAtsign'));
+  var stuff = await http.get(Uri.parse('https://wavi.ng/api?atp=counter$counter.ai6bh$currentAtsign'));
 
   result.httpResponse = stuff.body;
 }
